@@ -119,29 +119,29 @@
         details: this.details.value.trim(),
       };
 
-      // Basic validation check
       if (!data.name || !data.email || !data.phone || !data.type || !data.details) {
         alert("Please fill all required fields.");
         return;
       }
 
-try {
-  const response = await fetch("https://order-backend-nxon.onrender.com/send-order", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
+      try {
+        const response = await fetch("https://order-backend-nxon.onrender.com/send-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
 
-  if (response.ok) {
-    alert("Thank you! Your order has been sent successfully.");
-    this.reset();
-  } else {
-    alert("Failed to send order. Please try again later.");
-  }
-} catch (error) {
-  console.error("Error:", error);
-  alert("Error sending order. Please check your connection and try again.");
-}
-</script>
+        if (response.ok) {
+          alert("Thank you! Your order has been sent successfully.");
+          this.reset();
+        } else {
+          alert("Failed to send order. Please try again later.");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Error sending order. Please check your connection and try again.");
+      }
+    });
+  </script>
 </body>
 </html>
