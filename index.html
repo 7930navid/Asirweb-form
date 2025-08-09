@@ -61,6 +61,26 @@
         font-size: 18px;
       }
     }
+
+    /* Website URL inputs styling */
+    .url-container {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 30px;
+    }
+    #base-url {
+      width: 320px;
+      border-right: none;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      background-color: #e0e0e0;
+      cursor: not-allowed;
+    }
+    #site-extension {
+      flex-grow: 1;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
   </style>
 </head>
 <body>
@@ -77,7 +97,10 @@
     <input type="text" id="phone" name="phone" placeholder="+8801XXXXXXXXX" required />
 
     <label for="webname">🌐 Website Name</label>
-    <input type="text" id="webname" name="webname" placeholder="https://7930navid.github.io/myCustomWeb/" />
+    <div class="url-container">
+      <input type="text" id="base-url" value="https://7930navid.github.io/" readonly />
+      <input type="text" id="site-extension" name="site-extension" placeholder="your-site-name" required />
+    </div>
 
     <label for="type">📂 Website Type</label>
     <select id="type" name="type" required>
@@ -110,16 +133,24 @@
     document.getElementById("orderForm").addEventListener("submit", async function (e) {
       e.preventDefault();
 
+      const baseUrl = document.getElementById("base-url").value.trim();
+      const siteExt = document.getElementById("site-extension").value.trim();
+
+      if (!siteExt) {
+        alert("Please enter your website extension.");
+        return;
+      }
+
       const data = {
         name: this.name.value.trim(),
         email: this.email.value.trim(),
         phone: this.phone.value.trim(),
-        webname: this.webname.value.trim(),
+        webname: baseUrl + siteExt + "/",
         type: this.type.value,
         details: this.details.value.trim(),
       };
 
-      if (!data.name || !data.email || !data.phone || !data.type || !data.details) {
+      if (!data.name || !data.email || !data.phone || !data.webname || !data.type || !data.details) {
         alert("Please fill all required fields.");
         return;
       }
@@ -132,7 +163,10 @@
         });
 
         if (response.ok) {
-          alert("Thank you! Your order has been sent successfully.");
+          alert(
+            "Thank you! Your order has been sent successfully.\n" +
+            "Your website will live at " + data.webname
+          );
           this.reset();
         } else {
           alert("Failed to send order. Please try again later.");
